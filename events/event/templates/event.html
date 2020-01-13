@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+     <link rel="stylesheet" href="https://maxcdn.boootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"/>
+
+
+</head>
+<body>
+<h1>all events</h1>
+<table id="event_data">
+    <tr class="event1">
+        <th>|event_Name|</th>
+         <th>|event_type|</th>
+        <th>|total seats|</th>
+        <th>|event_date|</th>
+
+
+
+    </tr>
+
+</table>
+
+
+</table>
+<br>
+</form>
+<div class="container">
+    <div id="create_event"></div>
+    <button class="btn btn-success" id="btnclick" >create new event</button>
+
+</div>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#btnclick').click(function(){
+            $('#create_event').load('create_event.html');
+        })
+
+    });
+
+</script>
+
+
+
+</div>
+<div id="data">
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.ajax({
+            type: 'GET',
+             url: '{% url "view_event" %}',
+             dataType : "json",
+             async:false,
+
+             success : function(data) {
+                        console.log(data);
+
+                        data.forEach(function(dt){
+                            console.log(data);
+                            $("#event_data").append("<tr>"+
+                                "<td>"+dt.event_name+"</td>"+
+                                "<td>"+dt.event_type+"</td>"+
+                                "<td>"+dt.no_of_attendees+"</td>"+
+                                "<td>"+dt.event_date+"</td>"+
+                                "<td><button type='submit' class='register' id="+dt.event_name+">register</button></td>"+
+                                "<td><button type='submit' class='delete' id="+dt.event_name+">delete</button></td>"
+                            +"</tr>");
+
+                            $("#register").append("<tr class='lalit'>"+
+                               "<td>"+dt.event_type+"</td>"+
+                                "<td>"+dt.event_name+"</td>"+
+
+
+                            +"</tr>");
+
+                            });
+                         }
+
+             });
+            });
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+     $('.register').click(function(){
+        console.log('lalit');
+        console.log(this.id);
+
+        $.ajax({
+            type:'POST',
+            url:"{% url "register" %}",
+            data: {
+                event_name:this.id,
+
+                csrfmiddlewaretoken: '{{csrf_token }}',
+                },
+                success:function(data){
+                        alert('u have registered');
+                        }
+
+                });
+            });
+           });
+
+
+
+</script>
+<script type="text/javascript">
+  $(document).ready(function(){
+     $('.delete').click(function(){
+        console.log('lalit');
+        console.log(this.id);
+
+        $.ajax({
+            type:'POST',
+            url:"{% url "delete" %}",
+            data: {
+                event_name:this.id,
+
+                csrfmiddlewaretoken: '{{csrf_token }}',
+                },
+                success:function(data){
+                        alert('u have deleted');
+                        }
+
+                });
+            });
+           });
+
+
+
+</script>
+
+
+
+
+
+
+
+</body>
+</html>
